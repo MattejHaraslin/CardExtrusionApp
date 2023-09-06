@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
 import { TextGeometry } from './node_modules/three/examples/jsm/geometries/TextGeometry';
 import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader';
-// import fontImport from './node_modules/three/examples/fonts/helvetiker_regular.typeface.json';
+import { saveAs } from 'file-saver';
+import { STLExporter } from './node_modules/three/examples/jsm/exporters/STLExporter';
 
 
 // Setup scene
@@ -17,8 +18,6 @@ const cubeGeometry = new THREE.BoxGeometry();
 const cubeMaterial = new THREE.MeshNormalMaterial();
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 scene.add(cube)
-
-console.log(TextGeometry);
 // Position the camera
 camera.position.z = 2;
 
@@ -29,16 +28,18 @@ const animateCube = () => {
     cube.rotation.y += 0.005;
     renderer.render(scene, camera);
 };
-
 animateCube();
+
+var stlFile = '';
+var extrudedText = '';
 
 // Function to handle the form submission
 const handleFormSubmit = (event) => {
     event.preventDefault();
 
     // Get the uploaded STL file
-    const stlFile = stlFileInput.files[0];
-    const extrudedText = stlStringInput.value;
+    stlFile = stlFileInput.files[0];
+    extrudedText = stlStringInput.value;
 
     if (stlFile && extrudedText) {
 
@@ -58,48 +59,64 @@ const handleFormSubmit = (event) => {
                 extrudedGeometry = new TextGeometry(extrudedText, {
                     font: loadedFont, // Use the loaded font
                     size: 5, // Adjust size as needed
-                    height: 2, // Adjust extrusion depth
+                    height: -10, // Adjust extrusion depth.
+                    material: 0,
+                    extrudeMaterial: 1,
                 });
 
-                extrudedMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                console.log(extrudedGeometry);
+
+                extrudedMaterial = new THREE.MeshBasicMaterial({ color: 0xffff });
 
                 // Now, you can create the extrudedMesh and add it to the scene
                 const extrudedMesh = new THREE.Mesh(extrudedGeometry, extrudedMaterial);
+                extrudedMesh.rotation.x = Math.PI / 2
+                extrudedMesh.rotation.y = Math.PI / 2
 
-                extrudedMesh.position.set(30, 0, 0); // Adjust x, y, z coordinates
+                extrudedMesh.position.set(5, 23, -6); // !!! ACTUALLY relative to the scene, the coordinates are: Z, X, Y
 
-                // Clear the scene
                 scene.clear();
-                scene.add(mesh);
-                scene.add(extrudedMesh); // Add the extruded text to the scene
 
-                console.log("my variables: ", extrudedGeometry, extrudedMaterial);
-                console.log(mesh);
-                console.log(extrudedMesh);
+                const combinedGroup = new THREE.Group();
+                combinedGroup.add(mesh);
+                combinedGroup.add(extrudedMesh);
+                scene.add(combinedGroup);
+
+                combinedGroup.rotation.x = -Math.PI / 2;
+                camera.lookAt(scene.position);
+
+                camera.aspect = (window.innerWidth / 2) / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    combinedGroup.rotation.z += 0.015;
+
+                    renderer.render(scene, camera);
+                };
+
+                camera.position.z = 150;
+                camera.position.y = -55;
+                camera.position.x = 0;
+                animate();
+
+                document.querySelector('#exportButton').disabled = false;
             });
-
-
-            mesh.rotation.x = -Math.PI / 2;
-            camera.lookAt(scene.position);
-
-            camera.aspect = (window.innerWidth / 2) / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            const animate = () => {
-                requestAnimationFrame(animate);
-                mesh.rotation.z += 0.015;
-
-                renderer.render(scene, camera);
-            };
-
-            camera.position.z = 150;
-            camera.position.y = -55;
-            camera.position.x = 0;
-
-            animate();
         });
-    } else alert('All fields must be filled!');
+    } else alert('You forgot to pick TEXT, FILE, or BOTH!');
 };
+
+
+const handleExport = () => {
+    var exporter = new STLExporter();
+    var strExport = exporter.parse(scene);
+    var blob = new Blob([strExport], { type: 'text/plain' });
+    saveAs(blob, `${extrudedText}_STL_CARD.stl`);
+}
+
+const exportButton = document.getElementById('exportButton');
+exportButton.addEventListener('click', handleExport);
+
 
 // Get references to form and file input
 const stlUploadForm = document.getElementById('stlUploadForm');
