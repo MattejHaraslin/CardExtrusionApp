@@ -24,13 +24,18 @@
             <label for="extrudedTextInput">Enter Text to Extrude:</label>
             <input type="text" class="form-control" id="extrudedTextInput">
             <label for="stlFileInput">Upload STL Card File:</label>
-            <label class="btn btn-secondary btn-file">
-              Choose a file <input type="file" id="stlFileInput" accept=".stl" style="display: none;">
+            <label class="btn btn-secondary btn-file" style="margin-top: 15px;">
+              Choose a file <input type="file" id="stlFileInput" accept=".stl" style="display: none; margin-top: 10px;">
             </label>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-secondary" id="submitButton">Upload</button>
             <button class="btn btn-secondary" id="exportButton" disabled>Download 3D Card</button>
+          </div>
+          <div class="text-center" id="arrow-buttons" style="margin-top: 20px;">
+            <h6>Adjust text position</h6>
+            <button class="btn btn-secondary" id="leftArrowButton">←</button>
+            <button class="btn btn-secondary" id="rightArrowButton">→</button>
           </div>
         </form>
       </div>

@@ -34,6 +34,7 @@ animateCube();
 
 var stlFile = '';
 var extrudedText = '';
+var extrudedMesh = '';
 
 // Function handling the form submission
 const handleFormSubmit = (event) => {
@@ -65,7 +66,7 @@ const handleFormSubmit = (event) => {
                 });
 
                 extrudedMaterial = new THREE.MeshBasicMaterial({ color: 0xffff });
-                let extrudedMesh = new THREE.Mesh(extrudedGeometry, extrudedMaterial);
+                extrudedMesh = new THREE.Mesh(extrudedGeometry, extrudedMaterial);
 
                 // Performing the CSG subtraction
                 // NOTE: positioning settings sadly depend on the axis center point of the input card,
@@ -78,9 +79,10 @@ const handleFormSubmit = (event) => {
 
                 //horizontal length of the card is roughly 60 units
                 //adjusting text relative text position:
-                extrudedMesh.translateX(22); 
+                extrudedMesh.translateX(22); //adjusting on the x axis
                 extrudedMesh.translateY(-7);
                 extrudedMesh.translateZ(-1);
+                console.log(extrudedMesh.position.x + "updated position")
 
                 //updating matrix world of both meshes
                 mesh.updateMatrixWorld();
@@ -103,7 +105,7 @@ const handleFormSubmit = (event) => {
 
                 const animate = () => {
                     requestAnimationFrame(animate);
-                    meshResult.rotation.y += 0.03
+                    meshResult.rotation.y += 0.02
                     renderer.render(scene, camera);
                 };
 
@@ -119,6 +121,21 @@ const handleFormSubmit = (event) => {
         });
     } else alert('You forgot to pick TEXT, FILE, or BOTH!');
 };
+
+// Get references to the arrow buttons
+const leftArrowButton = document.getElementById('leftArrowButton');
+const rightArrowButton = document.getElementById('rightArrowButton');
+
+// Add event listeners to the arrow buttons
+leftArrowButton.addEventListener('click', () => {
+  // Decrease the translateX value (adjust this value as needed)
+  extrudedMesh.position.x -= 1;
+});
+
+rightArrowButton.addEventListener('click', () => {
+  // Increase the translateX value (adjust this value as needed)
+  extrudedMesh.position.x += 1;
+});
 
 // download / export function
 const handleExport = () => {
