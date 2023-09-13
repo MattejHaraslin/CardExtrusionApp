@@ -61,7 +61,7 @@ const handleFormSubmit = (event) => {
 
                 extrudedGeometry = new TextGeometry(extrudedText, {
                     font: loadedFont,
-                    size: 4, // Adjusting font SIZE
+                    size: 3.5, // Adjusting font SIZE
                     height: 4, // Adjust extrusion DEPTH
                 });
 
