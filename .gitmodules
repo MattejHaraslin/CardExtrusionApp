@@ -1,0 +1,3 @@
+[submodule "THREE-CSGMesh"]
+	path = THREE-CSGMesh
+	url = https://github.com/manthrax/THREE-CSGMesh.git
