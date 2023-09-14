@@ -29,15 +29,26 @@
             </label>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-secondary" id="submitButton">Upload</button>
-            <button class="btn btn-secondary" id="exportButton" disabled>Download 3D Card</button>
-          </div>
-          <div class="text-center" id="arrow-buttons" style="margin-top: 20px;">
             <h6>Adjust text position</h6>
-            <button class="btn btn-secondary" id="leftArrowButton">←</button>
-            <button class="btn btn-secondary" id="rightArrowButton">→</button>
+            <div class="form-group">
+              <label for="xAxisInput">X Axis Position:</label>
+              <input type="number" class="form-control number-input" id="xAxisInput" value="22">
+            </div>
+            <div class="form-group">
+              <label for="yAxisInput">Y Axis Position:</label>
+              <input type="number" class="form-control number-input" id="yAxisInput" value="-7">
+            </div>
+            <div class="form-group">
+              <label for="textSizeInput">Text Size:</label>
+              <input type="number" class="form-control number-input" id="textSizeInput" value="3.5">
+            </div>
+            <div class="text-center">
+              <button class="btn btn-secondary" id="adjustButton">Upload</button>
+              <button class="btn btn-secondary" id="exportButton" disabled>Download 3D Card</button>
+            </div>
           </div>
         </form>
+        
       </div>
     </div>
   </div>

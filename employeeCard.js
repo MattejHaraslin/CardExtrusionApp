@@ -61,7 +61,7 @@ const handleFormSubmit = (event) => {
 
                 extrudedGeometry = new TextGeometry(extrudedText, {
                     font: loadedFont,
-                    size: 3.5, // Adjusting font SIZE
+                    size: textSizeValue, // Adjusting font SIZE
                     height: 4, // Adjust extrusion DEPTH
                 });
 
@@ -75,12 +75,12 @@ const handleFormSubmit = (event) => {
                 mesh.position.set(0, 0, 0);
                 mesh.rotation.x = -Math.PI;
                 console.log('original rotation' + mesh.rotation.x);
-                mesh.rotation.y = Math.PI /2 ;
+                mesh.rotation.y = Math.PI / 2;
 
                 //horizontal length of the card is roughly 60 units
                 //adjusting text relative text position:
-                extrudedMesh.translateX(22); //adjusting on the x axis
-                extrudedMesh.translateY(-7);
+                extrudedMesh.translateX(xAxisValue); //adjusting on the x axis
+                extrudedMesh.translateY(yAxisValue);
                 extrudedMesh.translateZ(-1);
                 console.log(extrudedMesh.position.x + "updated position")
 
@@ -122,21 +122,6 @@ const handleFormSubmit = (event) => {
     } else alert('You forgot to pick TEXT, FILE, or BOTH!');
 };
 
-// Get references to the arrow buttons
-const leftArrowButton = document.getElementById('leftArrowButton');
-const rightArrowButton = document.getElementById('rightArrowButton');
-
-// Add event listeners to the arrow buttons
-leftArrowButton.addEventListener('click', () => {
-  // Decrease the translateX value (adjust this value as needed)
-  extrudedMesh.position.x -= 1;
-});
-
-rightArrowButton.addEventListener('click', () => {
-  // Increase the translateX value (adjust this value as needed)
-  extrudedMesh.position.x += 1;
-});
-
 // download / export function
 const handleExport = () => {
     var exporter = new STLExporter();
@@ -145,15 +130,27 @@ const handleExport = () => {
     saveAs(blob, `${extrudedText}_STL_CARD.stl`);
 }
 
-// "download" listening
+function readNumberInputs() {
+    xAxisValue = parseFloat(xAxisInput.value)
+    yAxisValue = parseFloat(yAxisInput.value)
+    textSizeValue = parseFloat(textSizeInput.value)
+}
+
+var xAxisValue = 22;
+var yAxisValue = -7;
+var textSizeValue = 3.5;
+
+const xAxisInput = document.getElementById('xAxisInput');
+const yAxisInput = document.getElementById('yAxisInput');
+const textSizeInput = document.getElementById('textSizeInput');
+
 const exportButton = document.getElementById('exportButton');
 exportButton.addEventListener('click', handleExport);
 
-
-// Getting references to form and file input
 const stlUploadForm = document.getElementById('stlUploadForm');
 const stlFileInput = document.getElementById('stlFileInput');
 const stlStringInput = document.getElementById('extrudedTextInput');
+const adjustButton = document.getElementById('adjustButton');
 
-// listening to form submission
+adjustButton.addEventListener('click', readNumberInputs);
 stlUploadForm.addEventListener('submit', handleFormSubmit);

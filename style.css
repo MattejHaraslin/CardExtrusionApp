@@ -8,6 +8,21 @@ body {
   min-height: 100vh;
 }
 
-.arrow-buttons {
-  margin-top: 10px;
+.form-group {
+  display: flex;
+  flex-direction: column; /* Keep this as 'column' for a vertical layout */
+  align-items: center;
+  margin: 10px 0; /* Add margin to separate each input group */
+}
+
+.form-group label {
+  margin-bottom: 5px; /* Add some space between label and input */
+}
+
+.form-group input[type="number"] {
+  width: 75px; /* Adjust the width as needed */
+}
+
+.number-input {
+  margin: 10px 0; /* Adjust the margin as needed */
 }
